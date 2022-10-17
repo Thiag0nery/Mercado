@@ -21,8 +21,9 @@ public class Soma {
     public String Resultado(){
         return String.format("%.2f", this.resultado);
     }
-    public void Resultado(double Recebido, double Subtotal){
-       this.resultado =  (Subtotal - Recebido);
+    public void Resultado(double Recebido){
+       
+       this.Number -= Recebido;
     }
 
     @Override

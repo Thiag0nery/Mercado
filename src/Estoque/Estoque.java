@@ -276,13 +276,18 @@ public class Estoque extends javax.swing.JFrame {
          
     }//GEN-LAST:event_tbtTabelaKeyReleased
 
-    private void btnInserirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_btnInserirActionPerformed
-
     private void tbtTabelaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbtTabelaMouseClicked
          
     }//GEN-LAST:event_tbtTabelaMouseClicked
+
+    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
+        new Caixa().setVisible(true);
+        dispose();
+    }//GEN-LAST:event_jLabel6MouseClicked
+
+    private void btnInserirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnInserirActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_btnInserirActionPerformed
 
     private void btnAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAtualizarActionPerformed
         Produto produto = new Produto();
@@ -299,11 +304,6 @@ public class Estoque extends javax.swing.JFrame {
         txtProduto.setText("");
         txtCodico.setText("");
     }//GEN-LAST:event_btnAtualizarActionPerformed
-
-    private void jLabel6MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel6MouseClicked
-        new Caixa().setVisible(true);
-        dispose();
-    }//GEN-LAST:event_jLabel6MouseClicked
     public void Adcionando(){
         DefaultTableModel Tabela = ( DefaultTableModel) tbtTabela.getModel();
         Tabela.setNumRows(0);

@@ -4,18 +4,25 @@
  */
 package Main;
 
+import Sistema.Impressao;
+import Sistema.Soma;
 import Envio.EnvioSQL;
 import Estoque.Estoque;
 import Estoque.Produto;
+import Sistema.Funcionarios;
 import java.awt.event.KeyEvent;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableModel;
 import javax.swing.table.TableRowSorter;
 import login.Existente;
-import Sistema.Soma;
-import java.awt.EventQueue;
 import java.util.Locale;
+import javax.swing.JOptionPane;
+
 
 /**
  *
@@ -57,7 +64,7 @@ public class Caixa extends javax.swing.JFrame {
         jPanel7 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
         txtValorUnitario = new javax.swing.JTextField();
-        jTextField1 = new javax.swing.JTextField();
+        txtNomeProduto = new javax.swing.JTextField();
         jPanel6 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jPanel4 = new javax.swing.JPanel();
@@ -67,17 +74,23 @@ public class Caixa extends javax.swing.JFrame {
         jPanel5 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         txtCodico = new javax.swing.JTextField();
+        jLabel11 = new javax.swing.JLabel();
+        txtFuncionario = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenu2 = new javax.swing.JMenu();
+        jMenuItem2 = new javax.swing.JMenuItem();
         jMenu3 = new javax.swing.JMenu();
         jMenu4 = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setUndecorated(true);
         addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowActivated(java.awt.event.WindowEvent evt) {
+                formWindowActivated(evt);
+            }
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
             }
@@ -226,17 +239,17 @@ public class Caixa extends javax.swing.JFrame {
             }
         });
 
-        jTextField1.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
-        jTextField1.addActionListener(new java.awt.event.ActionListener() {
+        txtNomeProduto.setFont(new java.awt.Font("Segoe UI", 0, 16)); // NOI18N
+        txtNomeProduto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jTextField1ActionPerformed(evt);
+                txtNomeProdutoActionPerformed(evt);
             }
         });
 
         jPanel6.setBackground(new java.awt.Color(102, 255, 255));
         jPanel6.setPreferredSize(new java.awt.Dimension(0, 29));
 
-        jLabel7.setText("jLabel7");
+        jLabel7.setText("NOME PRODUTO");
 
         javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
         jPanel6.setLayout(jPanel6Layout);
@@ -255,9 +268,10 @@ public class Caixa extends javax.swing.JFrame {
                 .addContainerGap(7, Short.MAX_VALUE))
         );
 
-        jPanel4.setBackground(new java.awt.Color(255, 51, 0));
+        jPanel4.setBackground(new java.awt.Color(255, 153, 0));
 
         jLabel4.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
+        jLabel4.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel4.setText("LISTA DE PRODUTOS");
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
@@ -265,9 +279,9 @@ public class Caixa extends javax.swing.JFrame {
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
-                .addGap(194, 194, 194)
+                .addGap(157, 157, 157)
                 .addComponent(jLabel4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(131, 131, 131))
+                .addGap(168, 168, 168))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -295,7 +309,7 @@ public class Caixa extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tblTabelaItens);
 
-        jPanel5.setBackground(new java.awt.Color(204, 102, 0));
+        jPanel5.setBackground(new java.awt.Color(255, 153, 0));
         jPanel5.setPreferredSize(new java.awt.Dimension(304, 37));
 
         jLabel10.setFont(new java.awt.Font("Segoe UI", 0, 18)); // NOI18N
@@ -323,6 +337,10 @@ public class Caixa extends javax.swing.JFrame {
                 txtCodicoKeyPressed(evt);
             }
         });
+
+        jLabel11.setFont(new java.awt.Font("Segoe UI", 0, 30)); // NOI18N
+        jLabel11.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel11.setText("FUNCIONARIO:");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -356,15 +374,22 @@ public class Caixa extends javax.swing.JFrame {
                             .addComponent(jPanel8, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txtValorProduto)
                             .addComponent(txtValorUnitario)
-                            .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                            .addComponent(txtNomeProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 184, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(jScrollPane1)
-                                .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(txtCodico)
-                                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(jScrollPane1)
+                                        .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                        .addComponent(txtCodico)
+                                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, 494, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(128, 128, 128)
+                                .addComponent(jLabel11, javax.swing.GroupLayout.PREFERRED_SIZE, 206, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(18, 18, 18)
+                                .addComponent(txtFuncionario, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -373,8 +398,8 @@ public class Caixa extends javax.swing.JFrame {
                 .addContainerGap()
                 .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(21, 21, 21)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -389,10 +414,10 @@ public class Caixa extends javax.swing.JFrame {
                             .addComponent(txtRecebido, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(txtTroco, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE))
                         .addContainerGap())
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
-                        .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtNomeProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(26, 26, 26)
                         .addComponent(jPanel7, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, 0)
@@ -402,15 +427,19 @@ public class Caixa extends javax.swing.JFrame {
                         .addGap(0, 0, 0)
                         .addComponent(txtValorProduto, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(192, 192, 192))
-                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(0, 0, 0)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 254, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(0, 0, 0)
                         .addComponent(txtCodico, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(jLabel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(txtFuncionario))
+                        .addContainerGap())))
         );
 
         jLabel1.setText("jLabel1");
@@ -432,6 +461,17 @@ public class Caixa extends javax.swing.JFrame {
         jMenuBar1.add(jMenu1);
 
         jMenu2.setText("Configurações");
+
+        jMenuItem2.setText("Gerar receitaa");
+        jMenuItem2.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jMenuItem2.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem2);
+
         jMenuBar1.add(jMenu2);
 
         jMenu3.setText("Ajuda");
@@ -465,7 +505,9 @@ public class Caixa extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 Soma soma = new Soma();
+Login lgin = new Login();
 EnvioSQL tabela = new EnvioSQL();
+
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         new Estoque().setVisible(true);
         dispose();
@@ -478,7 +520,7 @@ EnvioSQL tabela = new EnvioSQL();
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         DefaultTableModel Tabela = ( DefaultTableModel) tblTabelaItens.getModel();
         Tabela.setNumRows(0);
-       
+        
         
         for(Produto Adcionando: tabela.list()){
             Tabela.addRow(new Object[]{
@@ -489,16 +531,22 @@ EnvioSQL tabela = new EnvioSQL();
                 Adcionando.getCodico()
             });
         }
+        
+        String a = lgin.txtLogin.getText();
+       
+        
     }//GEN-LAST:event_formWindowOpened
-
-    private void jTextField1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jTextField1ActionPerformed
+    
+    
+    private void txtNomeProdutoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNomeProdutoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTextField1ActionPerformed
+    }//GEN-LAST:event_txtNomeProdutoActionPerformed
 
     private void txtRecebidoKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRecebidoKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
-            soma.Resultado(Double.parseDouble(txtRecebido.getText()), Double.parseDouble(txtSubtotal.getText()));
-            txtTroco.setText(soma.Resultado());
+            soma.Resultado(Double.parseDouble(txtRecebido.getText()));
+            txtTroco.setText(soma.toString());
+            
         }
     }//GEN-LAST:event_txtRecebidoKeyPressed
 
@@ -518,8 +566,9 @@ EnvioSQL tabela = new EnvioSQL();
                 double a = (double) tblTabelaItens.getValueAt(0, 2);
                 soma.Somando((double) a);
                 txtSubtotal.setText(String.valueOf(soma));
-
-                txtValorProduto.setText(String.valueOf(soma));
+                txtNomeProduto.setText(tblTabelaItens.getValueAt(0, 1).toString());
+                txtValorProduto.setText(tblTabelaItens.getValueAt(0, 2).toString());
+                txtValorUnitario.setText("1");
 
             }
         }
@@ -536,6 +585,37 @@ EnvioSQL tabela = new EnvioSQL();
            
        }
     }//GEN-LAST:event_txtValorUnitarioKeyPressed
+
+    private void formWindowActivated(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowActivated
+     
+    }//GEN-LAST:event_formWindowActivated
+
+    private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
+        
+        String file = JOptionPane.showInputDialog("Digite o nome do arquivo: ");
+        Impressao a = new Impressao();
+        boolean subpasta = new File("C:\\Receitas").mkdir();
+        
+        File Outra = new File("C:\\Receitas\\"+a+".txt");
+        String Funcionario = "Thiago";
+       
+        String data = "2000";
+        
+        String[] Arquivo = new String[]{
+            Funcionario,
+            soma.toString(),
+            data
+        };
+        try(BufferedWriter bw = new BufferedWriter(new FileWriter(Outra))){
+           for(String linha: Arquivo){
+                bw.write(linha);
+                bw.newLine();
+           }
+       }
+       catch( IOException e){
+           e.printStackTrace();
+       }
+    }//GEN-LAST:event_jMenuItem2ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -575,6 +655,7 @@ EnvioSQL tabela = new EnvioSQL();
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -589,6 +670,7 @@ EnvioSQL tabela = new EnvioSQL();
     private javax.swing.JMenu jMenu4;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
+    private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel13;
@@ -600,11 +682,12 @@ EnvioSQL tabela = new EnvioSQL();
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTable tblTabelaItens;
+    public javax.swing.JTable tblTabelaItens;
     private javax.swing.JTextField txtCodico;
+    public javax.swing.JTextField txtFuncionario;
+    private javax.swing.JTextField txtNomeProduto;
     private javax.swing.JTextField txtRecebido;
-    private javax.swing.JTextField txtSubtotal;
+    public javax.swing.JTextField txtSubtotal;
     private javax.swing.JTextField txtTroco;
     private javax.swing.JTextField txtValorProduto;
     private javax.swing.JTextField txtValorUnitario;
